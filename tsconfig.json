@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "outDir": "./build",
+    "paths": {
+      "tests": [
+        "tests/*"
+      ],
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@config/*": [
+        "src/config/*"
+      ],
+      "@constants/*": [
+        "src/constants/*"
+      ],
+      "@helpers/*": [
+        "src/helpers/*"
+      ],
+      "@navigations": [
+        "src/navigations"
+      ],
+      "@navigations/*": [
+        "src/navigations/*"
+      ],
+      "@screens/*": [
+        "src/screens/*"
+      ],
+      "@themes/*": [
+        "src/Themes/*"
+      ],
+      "@svgFiles": [
+        "src/custom.d.ts"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
