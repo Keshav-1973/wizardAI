@@ -1,73 +1,57 @@
 import {
-    GoogleSignin,
-    statusCodes,
-    User
+  GoogleSignin,
+  statusCodes,
+  User,
 } from '@react-native-google-signin/google-signin';
-import { EnvVars } from '@config/env';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { FindUserFormData } from '@screens/AuthStack/AuthRoutes';
+import {EnvVars} from '@config/env';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {FindUserFormData} from '@screens/AuthStack/AuthRoutes';
+import {mapAuthCodeToMessage} from '@helpers/CommonFunctions/CommonFunctions';
 
 try {
-    GoogleSignin.configure({
-        webClientId: EnvVars.OAuth.google.webClientId
-    });
+  GoogleSignin.configure({
+    webClientId: EnvVars.OAuth.google.webClientId,
+  });
 } catch (error) {
-    console.log(error, "configure")
+  console.log(error, 'configure');
 }
-
 
 export const AuthService = {
-    SigninViaGoogle: async (): Promise<User> => {
-        return await GoogleSignin.signIn();
-    },
+  SigninViaGoogle: async (): Promise<User> => {
+    return await GoogleSignin.signIn();
+  },
 
-    SignOutViaGoogle: async (): Promise<null> => {
-        return await GoogleSignin.signOut();
-    },
+  SignOutViaGoogle: async (): Promise<null> => {
+    return await GoogleSignin.signOut();
+  },
 
-    CreateUserWithEmailAndPassword: async (credentials: FindUserFormData): Promise<FirebaseAuthTypes.UserCredential> => {
-        return await auth().createUserWithEmailAndPassword(credentials.email, credentials.password)
-        // auth()
-        //     .createUserWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
-        //     .then(() => {
-        //         console.log('User account created & signed in!');
-        //     })
-        //     .catch(error => {
-        //         if (error.code === 'auth/email-already-in-use') {
-        //             console.log('That email address is already in use!');
-        //         }
+  CreateUserWithEmailAndPassword: async (
+    credentials: FindUserFormData,
+  ): Promise<FirebaseAuthTypes.UserCredential> => {
+    return await auth().createUserWithEmailAndPassword(
+      credentials.email,
+      credentials.password,
+    );
+  },
 
-        //         if (error.code === 'auth/invalid-email') {
-        //             console.log('That email address is invalid!');
-        //         }
+  SignInViaEmailPass: async (
+    credentials: FindUserFormData,
+  ): Promise<FirebaseAuthTypes.UserCredential> => {
+    return await auth().signInWithEmailAndPassword(
+      credentials.email,
+      credentials.password,
+    );
+  },
 
-        //         console.error(error);
-        //     });
-    },
+  CheckIfEmailExists: async (email: string): Promise<string[]> => {
+    return await auth().fetchSignInMethodsForEmail(email);
+  },
 
-    SignInViaEmailPass: async (credentials: FindUserFormData): Promise<FirebaseAuthTypes.UserCredential> => {
+  CheckIfEmailVerified: async (): Promise<boolean> => {
+    return auth()?.currentUser?.emailVerified;
+  },
 
-        return await auth().signInWithEmailAndPassword(credentials.email, credentials.password)
-        // auth()
-        //     .createUserWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
-        //     .then(() => {
-        //         console.log('User account created & signed in!');
-        //     })
-        //     .catch(error => {
-        //         if (error.code === 'auth/email-already-in-use') {
-        //             console.log('That email address is already in use!');
-        //         }
-
-        //         if (error.code === 'auth/invalid-email') {
-        //             console.log('That email address is invalid!');
-        //         }
-
-        //         console.error(error);
-        //     });
-    },
-
-    CheckIfEmailExists: async (email: string): Promise<string[]> => {
-        return await auth().fetchSignInMethodsForEmail(email)
-    },
-
-}
+  VerifyEmail: async (code: string): Promise<void> => {
+    return auth()?.applyActionCode(code);
+  },
+};

@@ -1,6 +1,6 @@
-import { createText } from '@shopify/restyle';
+import {createText} from '@shopify/restyle';
 import * as React from 'react';
-import { ThemeType } from '@themes/Themes';
+import {ThemeType} from '@themes/Themes';
 
 const TextComponent = createText<ThemeType>();
 

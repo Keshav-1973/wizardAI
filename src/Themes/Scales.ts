@@ -25,7 +25,7 @@ export enum ColorPalette {
     // DARK_GREEN = "#40744D",
     INPUT_LIGHT = "#dae5dd",
     INPUT_DARK = "#545252",
-    DARK_GREEN = "rgba(0, 128, 0, 1)",
+    DARK_GREEN = "#008000",
 
 }
 
@@ -40,7 +40,9 @@ export enum SemanticColors {
     SECONDARY_TEXT = 'secondaryText',
     HEADING = 'heading',
     INPUT_FIELD = "inputField",
-    SUBSCRIPT = "subscript"
+    SUBSCRIPT = "subscript",
+    SECONDARY_BUTTON_TEXT="secondaryButtonText",
+    PRIMARY_BUTTON_TEXT="primaryButtonText"
 }
 
 export enum SupportedDevices {

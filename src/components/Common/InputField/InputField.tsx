@@ -1,108 +1,124 @@
-import { FC } from 'react';
+import {FC} from 'react';
 import * as React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { TextInput, KeyboardTypeOptions } from 'react-native';
+import {StyleProp, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {TextInput, KeyboardTypeOptions} from 'react-native';
 // import colors from '../../../assets/themes/colors';
 import styles from './styles';
 // import { FormikErrors, FormikTouched } from 'formik';
-import { InputProps } from '@components/Common/CommonProps/InputProps';
+import {InputProps} from '@components/Common/CommonProps/InputProps';
 import TextComponent from '@components/Common/TextComponent/TextComponent';
-import { SemanticColors } from '@screens/../Themes/Scales';
-import { useTheme } from '@shopify/restyle';
-import { useAppSelector } from '@helpers/AppStore/AppStore';
-import { ThemeTypes } from '@themes/redux/ThemeConstant';
-import { ThemeType } from '@themes/Themes';
-import { FieldError } from 'react-hook-form';
-import { memo } from 'react';
+import {SemanticColors} from '@screens/../Themes/Scales';
+import {useTheme} from '@shopify/restyle';
+import {useAppSelector} from '@helpers/AppStore/AppStore';
+import {ThemeTypes} from '@themes/redux/ThemeConstant';
+import {ThemeType} from '@themes/Themes';
+import {FieldError} from 'react-hook-form';
+import {memo} from 'react';
 import ViewComponent from '@components/Common/ViewComponent/ViewComponent';
 
 interface Props extends InputProps {
   value?: string;
   label?: string;
-  icon?: any;
+  icon?: React.JSX.Element;
   iconPosition?: string;
-  error?: string | undefined
-  touched?: boolean
+  error?: string | undefined;
+  touched?: boolean;
   onIconPress?: () => void;
   secureTextEntry?: boolean;
   editable?: boolean;
   defaultValue?: string;
   onSubmitEditing?: any;
   keyboardType?: KeyboardTypeOptions;
+  rightIcon?: React.JSX.Element;
+  style?: StyleProp<ViewStyle>;
+  onChange?: () => void;
+  onBlur?: () => void;
 }
 
-const InputField: FC<Props> = (props) => {
-  const [focused, setFocused] = React.useState(false);
+const InputField: FC<Props> = ({
+  value,
+  label,
+  icon,
+  iconPosition,
+  error,
+  onIconPress,
+  secureTextEntry,
+  editable,
+  defaultValue,
+  onSubmitEditing,
+  keyboardType,
+  rightIcon,
+  style,
+  onChange,
+  onBlur,
+}: Props) => {
   const theme = useTheme<ThemeType>();
-  const currentTheme = useAppSelector((state) => state.theme.currentTheme);
+  const currentTheme = useAppSelector(state => state.theme.currentTheme);
 
-  const getFlexDirection = () => {
-    if (props.icon && props.iconPosition) {
-      if (props.iconPosition === 'left') {
-        return 'row';
-      } else {
-        return 'row-reverse';
-      }
-    }
-  };
-
-  const getBorderColor = () => {
-    if (props.error) {
-      return theme.colors.error;
-    }
-
-    return currentTheme === ThemeTypes.LIGHT
+  const wrapperStyle: StyleProp<ViewStyle> = {
+    backgroundColor: SemanticColors.INPUT_FIELD,
+    borderColor: error
+      ? theme.colors.error
+      : currentTheme === ThemeTypes.LIGHT
       ? theme.colors.secondaryText
-      : theme.colors.mainForeground;
+      : theme.colors.mainForeground,
+    flexDirection: icon
+      ? iconPosition === 'left'
+        ? 'row'
+        : 'row-reverse'
+      : 'row',
+    alignItems: icon ? 'center' : 'baseline',
   };
 
   return (
     <ViewComponent style={styles.inputContainer}>
-      {props.label && (
+      {!!label && (
         <TextComponent color={SemanticColors.MAIN_FOREGROUND}>
-          {props.label}
+          {label}
         </TextComponent>
       )}
       <ViewComponent
         backgroundColor={SemanticColors.INPUT_FIELD}
-         style={[
-          styles.wrapper,
-          { alignItems: props.icon ? 'center' : 'baseline' },
-          { borderColor: getBorderColor(), flexDirection: getFlexDirection() },
-        ]}
-      >
-        <TouchableOpacity onPress={props.onIconPress}>
-          <ViewComponent>{props.icon && props.icon}</ViewComponent>
-        </TouchableOpacity>
+        style={[styles.wrapper, wrapperStyle]}>
+        {!!icon && (
+          <ViewComponent>
+            <ViewComponent>{icon}</ViewComponent>
+          </ViewComponent>
+        )}
         <TextInput
           style={[
             styles.textInput,
-            props.style,
-            { color: theme.colors.mainForeground },
+            style,
+            {color: theme.colors.mainForeground},
           ]}
-          onChangeText={props.onChange}
-          defaultValue={props.defaultValue}
-          value={props.value}
-          onBlur={props.onBlur}
-          {...props}
+          onChangeText={onChange}
+          defaultValue={defaultValue}
+          value={value}
+          onBlur={onBlur}
           placeholderTextColor={
             currentTheme === ThemeTypes.LIGHT
               ? theme.colors.secondaryText
               : theme.colors.mainForeground
           }
-          editable={props.editable}
-          selectTextOnFocus={props.editable}
-          onEndEditing={props.onSubmitEditing}
+          editable={editable}
+          selectTextOnFocus={editable}
+          onEndEditing={onSubmitEditing}
           blurOnSubmit={false}
-          keyboardType={props.keyboardType}
+          keyboardType={keyboardType}
+          autoCapitalize="none"
+          secureTextEntry={secureTextEntry}
         />
+        {!!rightIcon && (
+          <TouchableOpacity onPress={onIconPress}>
+            <ViewComponent>{rightIcon}</ViewComponent>
+          </TouchableOpacity>
+        )}
       </ViewComponent>
-      {props.error && (
+      {!!error && (
         <TextComponent
-          style={{ color: theme.colors.error }}
-          accessibilityLiveRegion="polite"
-        >
-          {props.error}
+          style={{color: theme.colors.error}}
+          accessibilityLiveRegion="polite">
+          {error}
         </TextComponent>
       )}
     </ViewComponent>

@@ -1,69 +1,31 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Keyboard, StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
-import { ScrollView } from 'react-native';
-import { SemanticColors } from '@screens/../Themes/Scales';
+import React from 'react';
+import {StyleSheet, StyleProp, ViewStyle} from 'react-native';
+import {SemanticColors} from '@screens/../Themes/Scales';
 import ViewComponent from '@components/Common/ViewComponent/ViewComponent';
 
-
 type Props = {
-    children: JSX.Element | JSX.Element[];
-    style?: StyleProp<ViewStyle>
+  children: JSX.Element | JSX.Element[];
+  style?: StyleProp<ViewStyle>;
+  isPadded?: boolean;
 };
 
-const Container = ({ children, style }: Props) => {
-
-    const scrollViewRef = useRef<ScrollView>(null);
-
-    useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener(
-            'keyboardDidShow',
-            () => {
-                scrollViewRef.current?.scrollToEnd({ animated: true })
-            }
-        );
-        const keyboardDidHideListener = Keyboard.addListener(
-            'keyboardDidHide',
-            () => {
-                scrollViewRef.current?.scrollTo({
-                    y: 0,
-                    animated: true,
-                });
-            }
-        );
-
-        return () => {
-
-            keyboardDidHideListener.remove();
-            keyboardDidShowListener.remove();
-        };
-    }, []);
-
-
-    return (
-        <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
-            keyboardShouldPersistTaps="always"
-            ref={scrollViewRef}
-        >
-            <ViewComponent
-                style={[style ? style : styles.wrapper]}
-                backgroundColor={SemanticColors.MAIN_BACKGROUND}
-            >
-                {children}
-            </ViewComponent>
-        </ScrollView>
-    );
+const Container = ({children, style, isPadded}: Props) => {
+  return (
+    <ViewComponent
+      style={[styles(isPadded).wrapper, style]}
+      backgroundColor={SemanticColors.MAIN_BACKGROUND}>
+      {children}
+    </ViewComponent>
+  );
 };
 
 export default Container;
 
-
-const styles = StyleSheet.create({
+const styles = (isPadded: boolean) =>
+  StyleSheet.create({
     wrapper: {
-        padding: 10,
-        flex: 1,
-        height: '100%',
+      padding: isPadded ? 10 : 0,
+      flex: 1,
+      height: '100%',
     },
-});
-
-
+  });
