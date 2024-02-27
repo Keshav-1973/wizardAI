@@ -1,5 +1,5 @@
 # React Native Sample App      
-This is a sample React Native app showcasing various features including authentication flow, navigation, and email verification, reusable hooks, redux toolkit. This project can be used as an starter templae for any kind of app. Just add more screens and features and ready to be your app.
+This is a sample React Native app showcasing various features including authentication flow, navigation, and email verification, reusable hooks, redux toolkit. This project can be used as an starter templae for any kind of app be it Android or iOS. Just add more screens and features and ready to be your app.
 
 ## Tech Features
 - Redux Toolkit
