@@ -13,7 +13,7 @@ const Container = ({children, style, isPadded}: Props) => {
   return (
     <ViewComponent
       style={[styles(isPadded).wrapper, style]}
-      backgroundColor={SemanticColors.MAIN_BACKGROUND}>
+      backgroundColor={SemanticColors?.MAIN_BACKGROUND}>
       {children}
     </ViewComponent>
   );

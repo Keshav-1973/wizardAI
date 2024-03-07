@@ -20,6 +20,7 @@ const palette = {
   greenLight: '#56DCBA',
   greenPrimary: '#0ECD9D',
   greenDark: '#0A906E',
+  disabledButton: '#919993',
 
   black: '#0B0B0B',
   white: '#F0F2F3',
@@ -33,6 +34,7 @@ const darkPalette = {
   greenLight: '#56DCBA',
   greenPrimary: '#0ECD9D',
   greenDark: '#0A906E',
+  disabledButton: '#919993',
 
   black: '#0B0B0B',
   white: '#F0F2F3',
@@ -42,7 +44,6 @@ const theme = createTheme({
     mainBackground: ColorPalette.WHITE,
     mainForeground: ColorPalette.BLACK,
     cardPrimaryBackground: palette.purplePrimary,
-    // primaryButton: ColorPalette.DARK_BLUE,
     darkBlue: ColorPalette.DARK_BLUE,
     secondaryButton: ColorPalette.WHITE,
     error: ColorPalette.RED,
@@ -53,6 +54,7 @@ const theme = createTheme({
     heading: ColorPalette.DARK_GREEN,
     inputField: ColorPalette.INPUT_LIGHT,
     subscript: ColorPalette.DARK_GREEN,
+    disabledButton: palette.disabledButton,
   },
   spacing: {
     xs: 5,
@@ -117,6 +119,7 @@ export const darkTheme = {
     heading: ColorPalette.DARK_GREEN,
     inputField: ColorPalette.INPUT_DARK,
     subscript: ColorPalette.DARK_GREEN,
+    disabledButton: darkPalette.disabledButton,
   },
   spacing: {
     xs: 5,

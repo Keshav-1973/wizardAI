@@ -1,4 +1,5 @@
-import {StyleSheet} from 'react-native';
+import {StyleProp, StyleSheet, TextStyle, ViewStyle} from 'react-native';
+import Wrapper from './../Wrapper/Wrapper';
 
 export default StyleSheet.create({
   wrapper: {

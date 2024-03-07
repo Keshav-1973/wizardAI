@@ -1,5 +1,11 @@
-import React, {memo, useEffect, useState} from 'react';
-import {StyleProp, TouchableOpacity, ViewStyle} from 'react-native';
+import React, {memo} from 'react';
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native';
 import {SemanticColors, Spacings} from '@screens/../Themes/Scales';
 import ViewComponent from '@components/Common/ViewComponent/ViewComponent';
 import TextComponent from '@components/Common/TextComponent/TextComponent';
@@ -26,50 +32,47 @@ type Props = {
   titleAfterLogo?: any;
   logoMid?: any;
   innerStyles?: StyleProp<ViewStyle>;
+  isOpacity?: boolean;
+  customColor?: any;
 };
 
 const CustomButton = ({
   onPress,
   btnType,
   title,
-  loading,
   loadingTitle,
   disabled,
   logo,
-  accessibilityLabel,
   customStyles,
   titleAfterLogo,
   logoMid,
   innerStyles,
+  customColor,
+  loading = false,
+  isOpacity = true,
 }: Props) => {
   const theme = useTheme<ThemeType>();
   const currentTheme = useAppSelector(state => state.theme.currentTheme);
   const {mainBackground, mainForeground} = theme.colors;
   const activityIndicatorColor =
     btnType === BtnTypes.PRIMARY ? mainBackground : mainForeground;
-  // logic to prevent memory leak done by ActivityIndicator
-  const [mounted, setMounted] = useState(true);
-  useEffect(() => {
-    return () => {
-      setMounted(false);
-    };
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
+  const ViewWrapper = isOpacity ? TouchableOpacity : Pressable;
+  const makeBtnColor = () => {
+    if (customColor) {
+      return customColor;
+    } else if (btnType === BtnTypes.PRIMARY) {
+      return SemanticColors.PRIMARY_BUTTON;
+    } else if (btnType === BtnTypes.SECONDARY) {
+      SemanticColors.SECONDARY_BUTTON;
+    }
+  };
   return (
-    <TouchableOpacity
+    <ViewWrapper
       onPress={onPress}
       style={customStyles}
       disabled={disabled || loading}>
       <ViewComponent
-        backgroundColor={
-          btnType === BtnTypes.PRIMARY
-            ? SemanticColors.PRIMARY_BUTTON
-            : SemanticColors.SECONDARY_BUTTON
-        }
+        backgroundColor={makeBtnColor()}
         borderColor={
           currentTheme === ThemeTypes.LIGHT
             ? SemanticColors.PRIMARY_BUTTON_COLOR
@@ -80,43 +83,27 @@ const CustomButton = ({
         height={50}
         paddingHorizontal={Spacings.XS}
         marginVertical={Spacings.XS}
-        // borderWidth={1.6}
         flexDirection="row"
-        style={innerStyles}>
-     
+        style={[innerStyles, styles.borderRad]}>
+        {loading && (
           <ActivityIndicator
-          animating = {loading}
+            animating={loading}
             color={activityIndicatorColor}
-            style={{marginRight: 10}}
+            style={{marginRight: loading ? 10 : 0}}
           />
- 
-        <ViewComponent
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            position: 'absolute',
-            left: 30,
-            top: 0,
-            bottom: 0,
-          }}>
-          {logo && logo}
-        </ViewComponent>
-
+        )}
+        {logo && <ViewComponent style={styles.logo}>{logo}</ViewComponent>}
         {
           <TextComponent
             variant={
               btnType === BtnTypes.PRIMARY
                 ? 'primaryButtonText'
                 : 'secondaryButtonText'
-            }
-            accessibilityRole="button"
-            accessibilityLabel={
-              loading ? loadingTitle : accessibilityLabel || title
             }>
             {loading ? loadingTitle : title}
           </TextComponent>
         }
-        {logoMid && logoMid}
+        {logoMid ? logoMid : null}
         {titleAfterLogo && (
           <TextComponent
             variant={
@@ -128,8 +115,22 @@ const CustomButton = ({
           </TextComponent>
         )}
       </ViewComponent>
-    </TouchableOpacity>
+    </ViewWrapper>
   );
 };
 
 export default memo(CustomButton);
+
+const styles = StyleSheet.create({
+  logo: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    left: 30,
+    top: 0,
+    bottom: 0,
+  },
+  borderRad: {
+    borderRadius: 20,
+  },
+});

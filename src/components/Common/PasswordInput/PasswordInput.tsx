@@ -3,7 +3,7 @@ import InputField from '../InputField/InputField';
 import Password from '@assets/images/password.svg';
 import Eye from '@assets/images/eye.svg';
 import EyeOff from '@assets/images/eyeOff.svg';
-import {KeyboardTypeOptions} from 'react-native';
+import {KeyboardTypeOptions, Platform} from 'react-native';
 import {ColorPalette} from '@themes/Scales';
 import useToggle from '../Hooks/useToggle';
 
@@ -36,7 +36,7 @@ const PasswordInput = (props: Props) => {
   return (
     <InputField
       label={''}
-      placeholder="Enter Password"
+      placeholder="Password"
       onChange={onChange}
       onBlur={onBlur}
       value={value}
@@ -53,6 +53,7 @@ const PasswordInput = (props: Props) => {
       rightIcon={makePasswordIcon()}
       onIconPress={toggle}
       secureTextEntry={toggleValue}
+      keyboardType={toggleValue ? 'default' : 'visible-password'}
     />
   );
 };

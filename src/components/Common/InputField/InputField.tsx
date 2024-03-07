@@ -1,10 +1,16 @@
 import {FC} from 'react';
 import * as React from 'react';
-import {StyleProp, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
-import {TextInput, KeyboardTypeOptions} from 'react-native';
-// import colors from '../../../assets/themes/colors';
+import {
+  StyleProp,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+  TextInput,
+  KeyboardTypeOptions,
+} from 'react-native';
+import {} from 'react-native';
 import styles from './styles';
-// import { FormikErrors, FormikTouched } from 'formik';
 import {InputProps} from '@components/Common/CommonProps/InputProps';
 import TextComponent from '@components/Common/TextComponent/TextComponent';
 import {SemanticColors} from '@screens/../Themes/Scales';
@@ -31,7 +37,7 @@ interface Props extends InputProps {
   keyboardType?: KeyboardTypeOptions;
   rightIcon?: React.JSX.Element;
   style?: StyleProp<ViewStyle>;
-  onChange?: () => void;
+  onChange?: (text: string) => void;
   onBlur?: () => void;
 }
 
@@ -51,12 +57,12 @@ const InputField: FC<Props> = ({
   style,
   onChange,
   onBlur,
+  placeholder,
 }: Props) => {
   const theme = useTheme<ThemeType>();
   const currentTheme = useAppSelector(state => state.theme.currentTheme);
 
   const wrapperStyle: StyleProp<ViewStyle> = {
-    backgroundColor: SemanticColors.INPUT_FIELD,
     borderColor: error
       ? theme.colors.error
       : currentTheme === ThemeTypes.LIGHT
@@ -71,9 +77,9 @@ const InputField: FC<Props> = ({
   };
 
   return (
-    <ViewComponent style={styles.inputContainer}>
+    <ViewComponent style={styles.error}>
       {!!label && (
-        <TextComponent color={SemanticColors.MAIN_FOREGROUND}>
+        <TextComponent color={SemanticColors.MAIN_BACKGROUND}>
           {label}
         </TextComponent>
       )}
@@ -86,6 +92,7 @@ const InputField: FC<Props> = ({
           </ViewComponent>
         )}
         <TextInput
+          placeholder={placeholder}
           style={[
             styles.textInput,
             style,

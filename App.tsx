@@ -11,18 +11,19 @@ import {ThemeProvider} from '@shopify/restyle';
 import theme, {darkTheme} from '@themes/Themes';
 import {ThemeTypes} from '@themes/redux/ThemeConstant';
 import {ThemeActions} from '@themes/redux/ThemeSlice';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 function App(): JSX.Element {
   let applyTheme: any;
   const currentTheme = useColorScheme();
   if (currentTheme === ThemeTypes.DARK) applyTheme = darkTheme;
-  if (currentTheme === ThemeTypes.LIGHT) applyTheme = theme;
+  if (currentTheme === ThemeTypes.LIGHT) applyTheme = darkTheme;
 
   const switchTheme = async (colorScheme: ColorSchemeName) => {
     if (colorScheme === ThemeTypes.DARK) {
       appStore.dispatch(ThemeActions.changeTheme(ThemeTypes.DARK));
     } else {
-      appStore.dispatch(ThemeActions.changeTheme(ThemeTypes.LIGHT));
+      appStore.dispatch(ThemeActions.changeTheme(ThemeTypes.DARK));
     }
   };
 
@@ -42,14 +43,16 @@ function App(): JSX.Element {
   };
 
   return (
-    <ThemeProvider theme={applyTheme}>
-      <Provider store={appStore}>
-        <PersistGate loading={<Text>Welcome...</Text>} persistor={persistor}>
-          <MainNavigator />
-          <Toast config={toastConfig} />
-        </PersistGate>
-      </Provider>
-    </ThemeProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <ThemeProvider theme={applyTheme}>
+        <Provider store={appStore}>
+          <PersistGate loading={<Text>Welcome...</Text>} persistor={persistor}>
+            <MainNavigator />
+            <Toast config={toastConfig} />
+          </PersistGate>
+        </Provider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
 

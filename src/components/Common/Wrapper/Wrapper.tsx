@@ -1,21 +1,12 @@
 import * as React from 'react';
-import {
-  AccessibilityInfo,
-  findNodeHandle,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {FC} from 'react';
 import {useTheme} from '@shopify/restyle';
 import ViewComponent from '@components/Common/ViewComponent/ViewComponent';
-import TextComponent from '@components/Common/TextComponent/TextComponent';
-import {ColorPalette, SemanticColors} from '@screens/../Themes/Scales';
+import {ColorPalette} from '@screens/../Themes/Scales';
 import {ThemeType} from '@themes/Themes';
-import {SafeAreaView} from 'react-native-safe-area-context';
 
 interface props {
   navHeading: string;
@@ -23,11 +14,14 @@ interface props {
   onPressIcon?: () => void;
   accessibilityLabel?: string;
   children: JSX.Element;
+  canGoback?: boolean;
 }
 
 const Wrapper: FC<props> = props => {
   const navigation = useNavigation();
   const theme = useTheme<ThemeType>();
+
+  const {canGoback = true} = props;
 
   return (
     <View style={{flex: 1}}>
@@ -36,19 +30,20 @@ const Wrapper: FC<props> = props => {
           width: '100%',
           backgroundColor: theme.colors.mainBackground,
         }}>
-        <Appbar.BackAction
-          onPress={() => {
-            if (navigation.canGoBack()) {
-              navigation.goBack();
-            }
-          }}
-          color={ColorPalette.DARK_GREEN}
-        />
-
+        {canGoback && (
+          <Appbar.BackAction
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              }
+            }}
+            color={ColorPalette.DARK_GREEN}
+          />
+        )}
         <ViewComponent style={styles.header}>
           <Appbar.Content
             title={props.navHeading}
-            style={styles.heading}
+            style={styles.heading(canGoback)}
             color={ColorPalette.DARK_GREEN}
             titleStyle={{fontWeight: '700'}}
           />
@@ -63,7 +58,6 @@ const Wrapper: FC<props> = props => {
           )}
         </ViewComponent>
       </Appbar.Header>
-
       <ViewComponent style={[styles.children]}>{props.children}</ViewComponent>
     </View>
   );
@@ -74,10 +68,11 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
-  heading: {
+  heading: canGoback => ({
     width: '80%',
     justifyContent: 'center',
-  },
+    paddingLeft: !canGoback ? 16 : 0,
+  }),
   header: {
     width: '100%',
     justifyContent: 'center',
